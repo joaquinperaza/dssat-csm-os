@@ -1,0 +1,79 @@
+site_name: DSSAT Python
+site_description: DSSAT Cropping System Model — pure Python implementation
+repo_url: https://github.com/DSSAT/dssat-csm-os
+repo_name: DSSAT/dssat-csm-os
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.integrate
+    - content.code.annotate
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: green
+      accent: light green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_signature_annotations: true
+            members_order: source
+            separate_signature: true
+            show_if_no_docstring: false
+  - mkdocs-jupyter:
+      execute: true
+      include_source: true
+      allow_errors: false
+      kernel_name: python3
+      include: ["*.ipynb"]
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Examples:
+    - CERES-Maize Experiment: examples/ceres_maize_experiment.ipynb
+    - CERES-Millet Experiment: examples/ceres_millet_experiment.ipynb
+    - CERES-Sorghum Experiment: examples/ceres_sorghum_experiment.ipynb
+    - CERES-Wheat Experiment: examples/ceres_wheat_experiment.ipynb
+  - API Reference:
+    - Core: api/core.md
+    - Weather: api/weather.md
+    - Soil: api/soil.md
+    - Crops: api/crops.md
+    - Management: api/management.md
+    - I/O: api/io.md
+    - Output: api/output.md

@@ -1,0 +1,70 @@
+{
+  "experiment_id": "UFGA8201",
+  "description": "Maize example — Gainesville FL 1982",
+  "simulation": {
+    "start_date": 1982100,
+    "nyrs": 1,
+    "water": "Y",
+    "nitrogen": "Y",
+    "phosphorus": "N",
+    "potassium": "N",
+    "et_method": "R",
+    "som_method": "G",
+    "co2": 344.0
+  },
+  "crop": {
+    "model": "MZCER",
+    "cultivar": {
+      "id": "IB0001",
+      "name": "DEKALB XL71A",
+      "ecotype": "IBMZ01",
+      "p1": 220.0,
+      "p2": 0.52,
+      "p5": 730.0,
+      "g2": 823.0,
+      "g3": 8.80,
+      "phint": 38.9
+    }
+  },
+  "planting": {
+    "date": 1982100,
+    "pltpop": 7.2,
+    "sdepth": 6.0,
+    "rowspc": 76.0
+  },
+  "soil": {
+    "id": "IBMZ910014",
+    "inline": {
+      "description": "Millhopper Fine Sand, Gainesville FL",
+      "taxon": "Loamy, siliceous, hyperthermic Grossarenic Paleudult",
+      "salb": 0.18,
+      "slpf": 0.92,
+      "layers": [
+        {"depth_bottom":  5, "bd": 1.36, "ll": 0.023, "dul": 0.086, "sat": 0.230, "swcn": 7.40, "oc": 0.90, "clay":  2, "sand": 92, "ph": 6.0},
+        {"depth_bottom": 15, "bd": 1.40, "ll": 0.023, "dul": 0.086, "sat": 0.230, "swcn": 7.40, "oc": 0.69, "clay":  2, "sand": 92, "ph": 6.0},
+        {"depth_bottom": 30, "bd": 1.47, "ll": 0.023, "dul": 0.086, "sat": 0.215, "swcn": 3.68, "oc": 0.28, "clay":  2, "sand": 90, "ph": 6.0},
+        {"depth_bottom": 45, "bd": 1.53, "ll": 0.025, "dul": 0.090, "sat": 0.208, "swcn": 1.47, "oc": 0.20, "clay":  2, "sand": 89, "ph": 6.0},
+        {"depth_bottom": 60, "bd": 1.66, "ll": 0.025, "dul": 0.087, "sat": 0.185, "swcn": 0.88, "oc": 0.09, "clay":  3, "sand": 87, "ph": 6.3},
+        {"depth_bottom": 90, "bd": 1.66, "ll": 0.058, "dul": 0.101, "sat": 0.185, "swcn": 0.35, "oc": 0.03, "clay":  7, "sand": 80, "ph": 6.3},
+        {"depth_bottom":120, "bd": 1.66, "ll": 0.075, "dul": 0.122, "sat": 0.185, "swcn": 0.35, "oc": 0.03, "clay": 10, "sand": 76, "ph": 6.3},
+        {"depth_bottom":150, "bd": 1.66, "ll": 0.080, "dul": 0.130, "sat": 0.185, "swcn": 0.35, "oc": 0.03, "clay": 10, "sand": 75, "ph": 6.3},
+        {"depth_bottom":180, "bd": 1.66, "ll": 0.070, "dul": 0.115, "sat": 0.185, "swcn": 0.35, "oc": 0.01, "clay":  8, "sand": 77, "ph": 6.3}
+      ]
+    }
+  },
+  "weather": {
+    "source": "example_weather.json"
+  },
+  "initial_conditions": {
+    "sw_layers": [0.086, 0.086, 0.086, 0.086, 0.086, 0.086, 0.086, 0.086, 0.086],
+    "no3_layers": [4.0, 3.0, 2.0, 1.5, 1.0, 0.5, 0.5, 0.5, 0.5],
+    "nh4_layers": [0.5, 0.5, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.1]
+  },
+  "fertilizer": [
+    {"date": 1982100, "amount": 40.0, "n_pct": 46.0, "type": "FE005"},
+    {"date": 1982130, "amount": 80.0, "n_pct": 46.0, "type": "FE005"}
+  ],
+  "harvest": {
+    "method": "M"
+  }
+}

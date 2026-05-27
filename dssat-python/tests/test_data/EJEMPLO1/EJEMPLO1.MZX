@@ -1,0 +1,161 @@
+*EXP.DETAILS: EJEMPLO1MZ Práctica uno Maíz
+*GENERAL
+@PEOPLE
+Curso modelos de simulacion
+@ADDRESS
+Facultad de Agronomía EEMAC
+@SITE
+URUGUAY
+
+*TREATMENTS                        -------------FACTOR LEVELS------------
+@N R O C TNAME.................... CU FL SA IC MP MI MF MR MC MT ME MH SM
+ 1 1 0 0 DKB 333B                   1  1  0  1  1  1  1  0  0  0  0  0  1
+ 2 1 0 0 AG9010                     2  1  0  1  1  1  1  0  0  0  0  0  1
+
+
+*CULTIVARS
+@C CR INGENO CNAME
+ 1 MZ IB0173 DKB 333B
+ 2 MZ IB0171 AG9010
+
+*FIELDS
+! WSTA es la estación climática que se quiere utilizar. Se deben cargar las primeras cuatro letras del nombre del/los archivo/s de clima (.wth) de
+! dicha estación. Estos archivos .wth deben estar en la carpeta DSSAT46/Weather
+! ID_SOIL es él código de la serie de suelos que se quiere utilizar. Este código (de 10 dígitos) debe ser "EXACTAMENTE" igual al que figura en el 
+! archivo de suelos (.sol) correspondinte a la serie de suelos que se quiere utilizar. Este archivo .sol debe estar en la carpeta DSSAT46/Soil.
+
+@L ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX   SLDP ID_SOIL
+ 1 UYLETEST UYLE       -99     0 IB000     0     0 00000 -99     -99 WI_LVUY018
+
+
+*SOIL ANALYSIS
+! La información de este factor hay que cargarla cuando se utiliza la opción P (Century) de simulación de MO Suelo dentro 
+! de SIMULATION CONTROLS/METHODS/MESOM
+! Hay tres alternativas de cálculo de la MO
+! 1- Si MESOM = P en SOIL ANALYSIS poner SAOC y SASC - SAOC: % C suelo (reemplaza a dato de soil.sol y SASC; % C estable (más lenta desc)
+! 2- o en factor FIELDS poner valores a FLHST y FHDUR y se estima a partir de SOMFR045.SDA
+! 3- o DSSAT asume SASC = 0.15*(%Cl+%Li)+0.69
+
+@A SADAT  SMHB  SMPX  SMKE  SANAME
+ 1 98152   -99   -99   -99  -99
+@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+ 1     5   -99   2.0   -99   -99   -99   -99   -99   .80
+ 1    20   -99   1.2   -99   -99   -99   -99   -99   .70
+ 1    40   -99   .60   -99   -99   -99   -99   -99   .40
+ 1    60   -99   .30   -99   -99   -99   -99   -99   .20
+ 1    90   -99   .30   -99   -99   -99   -99   -99   .10
+
+
+*INITIAL CONDITIONS
+! PCR: cultivo antecesor
+! ICRT: kg/ha de raíces y/o nódulos
+! ICRN: cantidad de nódulos
+! ICRE: eficiencia de nodulación
+! ICRES: kg/ha de rastrojo
+! ICREN: % N de rastrojo
+! ICRIP: % porcentaje de incorporación
+! ICRID: profundidad de incorporación
+! SH2O: contenido de agua cm3/cm3
+! SNH4: ppm de N-NH4
+! SNO3: ppm de N-NO3
+@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+ 1    SB 66263   100     0     1     1   180  2000    .8     0   100     5 -99
+@C  ICBL  SH2O  SNH4  SNO3
+ 1    25 0.182   1.0  14.5
+ 1    47 0.240   0.5   7.3
+ 1    65 0.375   0.5   3.6
+ 1    94 0.316   0.5   1.8
+ 1   122 0.313   0.5   0.9
+ 1   152 0.308   0.5   0.9
+
+*PLANTING DETAILS
+@P PDATE EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL                        PLNAME
+ 1 66263   -99     7     7     S     R    52     0     5   -99   -99   -99   -99     0                        -99
+
+
+*IRRIGATION AND WATER MANAGEMENT
+! Se deben agregar las dos lineas de encabezado por cada nivel de factor (tratamiento) que quiera agregarse.
+! Si hay riegos en diferentes fechas deben agregarse un renglon para cada envento debajo del segundo renglón de encabezados
+@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT
+ 1  1.00    30    50   100 GS007 IR001    10
+@I IDATE  IROP IRVAL
+ 1 00001 IR004    10
+ 
+ 
+*FERTILIZERS (INORGANIC)
+! FMCD: Fertilizer material, code
+! FAMN: N in applied fertilizer, kg ha-1 (kg de N/ha por
+! FDEP: Fertilizer incorporation/application depth, cm
+! FACD: Fertilizer application/placement, code
+! Se aplican 70 kg/ha de N para alcanzar 130 kg/ha de N
+@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD  FERNAME
+ 1 00045 FE005 AP002    15    90     0     0     0     0      
+
+
+*RESIDUES AND ORGANIC FERTILIZER
+@R RDATE  RCOD  RAMT  RESN  RESP  RESK  RINP  RDEP  RMET RENAME
+ 1 00000 RE001  2000   1.0   -99   -99     0     0 AP001 -99
+
+
+*TILLAGE AND ROTATIONS
+@T TDATE TIMPL  TDEP TNAME
+ 1 00000 TI020    15 Fertilizado en bandas
+ 
+ 
+*ENVIRONMENT MODIFICATIONS      
+@E ODATE EDAY  ERAD  EMAX  EMIN  ERAIN ECO2  EDEW  EWIND ENVNAME
+ 1 00000 A   0 A   0 A 0.7 A 0.7 M0.83 R 418 A   0 A   0 test 1
+
+
+*HARVEST DETAILS
+! HSTG: Harvest stage
+! HCOM: Harvest component
+! HPC: Harvest percentage
+@H HDATE  HSTG  HCOM HSIZE   HPC  HBPC HNAME
+ 1 00000 GS000   -99   -99   100     0 NA
+
+
+*SIMULATION CONTROLS
+! NYERS: cantidad de años que se quieren simular. IMPORTANTE: debemos tener en la carpeta DSSAT46/Wheater la información climática de todos los
+! años que queremos simular
+! START: Simulation start; P = a la siembra, S = en una fecha especifica
+! WTHER: Weather data; M = Medido, 
+! INCON: Initial conditions; M = Medido
+! LIGHT: Interception; E = Coeficiente de extinsion, H = Bandas de cultivo (Cropgro)
+! PHOTO: Photosynthesis; C = a nivel de canopeo, L = a nivel de hoja (Cropgro)
+! MESEV: Evaporation; R = Ritchie, S = Suleiman
+! PLANT, IRRIG, FERT: R = fecha reportada, A = automático, D = dias despues de la siembra
+! Si se desean cargar más de 1 nivel de este factor (SM) deben copiarse todos los encabezados tantas veces como niveles se pretendan
+
+@N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL
+ 1 GE             26     1     S 66001  2150 Maiz
+@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2
+ 1 OP              Y     N     N     N     N     N     N     N     D
+@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL
+ 1 ME              M     M     E     R     S     C     R     1     G     R     1
+@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS
+ 1 MA              R     D     D     D     M
+@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT VBOSE CHOUT OPOUT
+ 1 OU              N     Y     Y     1     Y     Y     Y     Y     N     N     Y     N     N
+
+@  AUTOMATIC MANAGEMENT
+! Si PLANT es A, definir PFRST = fecha desde y PLAST = fecha hasta y si el agua útil de una capa control 
+! se encuentra entre PH2OU = limite inferior y PH2OD = limite superior y la temperatura media de 0-10 cm
+! se encuentra por encima de PSTMN = temperatura minima o por debajo de PSTMX = temperatura maxima
+@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN
+ 1 PL          00000 00000    40   100    30    40    10
+@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF
+ 1 IR             30    50   100 IB001 IB001    10   .75
+@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF
+ 1 NI             30    50    25 IB001 IB001
+@N RESIDUES    RIPCN RTIME RIDEP
+ 1 RE            100     1    20
+@N HARVEST     HFRST HLAST HPCNP HPCNR
+ 1 HA              0 00000   100     0
+
+
+
+
+
+
+ 

@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dssat.net/schemas/experiment.schema.json",
+  "title": "DSSAT Experiment",
+  "description": "Complete experiment specification replacing the legacy .X file format",
+  "type": "object",
+  "required": ["experiment_id", "simulation", "crop", "soil", "weather", "initial_conditions"],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "description": "Unique experiment identifier (max 10 chars)"
+    },
+    "description": { "type": "string" },
+    "simulation": {
+      "type": "object",
+      "description": "Simulation control switches (replaces DSSAT45.INP SIMULATION CONTROLS section)",
+      "required": ["start_date"],
+      "properties": {
+        "start_date": { "type": "integer", "description": "Simulation start date YYYYDDD" },
+        "end_date":   { "type": "integer", "description": "Simulation end date YYYYDDD (optional)" },
+        "nyrs":       { "type": "integer", "default": 1 },
+        "water":      { "type": "string", "enum": ["Y","N"], "default": "Y" },
+        "nitrogen":   { "type": "string", "enum": ["Y","N"], "default": "Y" },
+        "phosphorus": { "type": "string", "enum": ["Y","N"], "default": "N" },
+        "potassium":  { "type": "string", "enum": ["Y","N"], "default": "N" },
+        "et_method":  { "type": "string", "enum": ["R","F","P"], "default": "R",
+                        "description": "Evapotranspiration: R=Ritchie, F=FAO-56, P=Penman-Monteith" },
+        "som_method": { "type": "string", "enum": ["G","P"], "default": "G",
+                        "description": "Soil organic matter: G=CERES, P=Century" },
+        "co2":        { "type": "number", "default": 380.0, "description": "CO2 ppm (overridden by weather if present)" }
+      }
+    },
+    "crop": {
+      "type": "object",
+      "description": "Crop model selection and cultivar",
+      "required": ["model", "cultivar"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": ["MZCER","WHCER","RICER","SGCER","MLCER","SBCRO","PNCRO","BNCRO","TMCRO","PTCRO","CSCAS","CNGRO","SMUCA"],
+          "description": "8-char model code (first 5 chars)"
+        },
+        "cultivar": {
+          "type": "object",
+          "description": "Cultivar coefficients — keys depend on model",
+          "required": ["id"],
+          "properties": {
+            "id":     { "type": "string" },
+            "name":   { "type": "string" },
+            "ecotype":{ "type": "string" }
+          },
+          "additionalProperties": { "type": "number" }
+        }
+      }
+    },
+    "planting": {
+      "type": "object",
+      "properties": {
+        "date":   { "type": "integer", "description": "Planting date YYYYDDD" },
+        "pltpop": { "type": "number",  "description": "Plant population (plants m-2)" },
+        "sdepth": { "type": "number",  "description": "Sowing depth (cm)" },
+        "rowspc": { "type": "number",  "description": "Row spacing (cm)" }
+      }
+    },
+    "soil": {
+      "type": "object",
+      "description": "Soil profile specification",
+      "required": ["id"],
+      "properties": {
+        "id":      { "type": "string" },
+        "source":  { "type": "string", "description": "Path or reference to a soil JSON file" },
+        "inline":  {
+          "$ref": "#/$defs/soil_profile",
+          "description": "Inline profile — use instead of 'source'"
+        }
+      }
+    },
+    "weather": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": { "type": "string", "description": "Path to weather JSON file or inline key" },
+        "inline": { "$ref": "#/$defs/weather_station" }
+      }
+    },
+    "initial_conditions": {
+      "type": "object",
+      "required": ["sw_layers"],
+      "properties": {
+        "sw_layers": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Initial volumetric water content by layer (cm3/cm3)"
+        },
+        "no3_layers": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Initial NO3 by layer (µg g-1)"
+        },
+        "nh4_layers": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Initial NH4 by layer (µg g-1)"
+        },
+        "water_table_depth": { "type": "number", "description": "Initial water table depth (cm)" }
+      }
+    },
+    "irrigation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "amount"],
+        "properties": {
+          "date":   { "type": "integer" },
+          "amount": { "type": "number", "description": "mm" },
+          "method": { "type": "string", "default": "IR001" }
+        }
+      }
+    },
+    "fertilizer": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "amount"],
+        "properties": {
+          "date":      { "type": "integer" },
+          "amount":    { "type": "number", "description": "kg ha-1" },
+          "n_pct":     { "type": "number", "default": 0.0 },
+          "p_pct":     { "type": "number", "default": 0.0 },
+          "k_pct":     { "type": "number", "default": 0.0 },
+          "type":      { "type": "string", "default": "FE001",
+                         "description": "FE001=urea, FE004=ammonium nitrate, ..." },
+          "depth":     { "type": "number", "default": 0.0 },
+          "placement": { "type": "string", "default": "AP" }
+        }
+      }
+    },
+    "tillage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date"],
+        "properties": {
+          "date":      { "type": "integer" },
+          "implement": { "type": "string", "default": "TI001" },
+          "depth":     { "type": "number", "default": 10.0 },
+          "mix_pct":   { "type": "number", "default": 0.5 }
+        }
+      }
+    },
+    "harvest": {
+      "type": "object",
+      "properties": {
+        "method": { "type": "string", "enum": ["M","A","G"], "default": "M",
+                    "description": "M=at maturity, A=automatic, G=on given date" },
+        "date":   { "type": "integer" }
+      }
+    }
+  },
+  "$defs": {
+    "soil_profile": {
+      "type": "object",
+      "required": ["layers"],
+      "properties": {
+        "description": { "type": "string" },
+        "taxon":       { "type": "string" },
+        "salb":        { "type": "number" },
+        "slpf":        { "type": "number", "default": 1.0 },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["depth_bottom", "bd", "ll", "dul", "sat"],
+            "properties": {
+              "depth_bottom": { "type": "number", "description": "Cumulative depth to bottom of layer (cm)" },
+              "bd":  { "type": "number", "description": "Bulk density (g cm-3)" },
+              "ll":  { "type": "number", "description": "Lower limit (cm3 cm-3)" },
+              "dul": { "type": "number", "description": "Drained upper limit (cm3 cm-3)" },
+              "sat": { "type": "number", "description": "Saturation (cm3 cm-3)" },
+              "swcn":{ "type": "number", "description": "Saturated hydraulic conductivity (cm h-1)" },
+              "oc":  { "type": "number", "description": "Organic carbon (g 100g-1)" },
+              "clay":{ "type": "number" },
+              "sand":{ "type": "number" },
+              "ph":  { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "weather_station": {
+      "type": "object",
+      "required": ["lat", "records"],
+      "properties": {
+        "lat":   { "type": "number" },
+        "lon":   { "type": "number" },
+        "elev":  { "type": "number" },
+        "tav":   { "type": "number" },
+        "tamp":  { "type": "number" },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["date", "tmax", "tmin", "srad", "rain"],
+            "properties": {
+              "date":   { "type": "integer", "description": "YYYYDDD" },
+              "tmax":   { "type": "number" },
+              "tmin":   { "type": "number" },
+              "srad":   { "type": "number" },
+              "rain":   { "type": "number" },
+              "windsp": { "type": "number" },
+              "rhum":   { "type": "number" },
+              "tdew":   { "type": "number" },
+              "co2":    { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
